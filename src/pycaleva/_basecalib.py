@@ -817,7 +817,7 @@ class _BaseCalibrationEvaluator:
             return cb.stats()
 
 
-    def calibration_plot(self):
+    def calibration_plot(self, colors={"Perfectly calibrated": "black", "Nonparametric": "blue", "histogram": "lightgrey", "Grouped observations": "red"}):
         """Generate the calibration plot for the given predicted probabilities and true class labels of current class instance.
 
         Returns
@@ -860,7 +860,7 @@ class _BaseCalibrationEvaluator:
         x_nonparametric,y_nonparametric = self.__nonparametric_fit(update_awlc=False)
 
         # Add calibration line for model
-        plt.scatter(p_grouped,y_grouped, marker="^", facecolors='none', edgecolors='r', label=f'Grouped observations g={self.__ngroups}')
+        plt.scatter(p_grouped,y_grouped, marker="^", facecolors='none', edgecolors=colors["Grouped observations"], label=f'Grouped observations g={self.__ngroups}')
 
         # Add histogram on second axis
         h, e = np.histogram(self.__p, bins=50)
@@ -869,13 +869,14 @@ class _BaseCalibrationEvaluator:
         ax2 = ax1.twinx()
         ax2.set_ylim(-0.1,5)        # Scale down histogram
         ax2.axis('off')             # Hide labels and ticks
-        ax2.stem(e[:-1],h, linefmt="grey", markerfmt=" ", basefmt=" ")
+        markerline, stemlines, baseline = ax2.stem(e[:-1],h, linefmt="grey", markerfmt=" ", basefmt=" ")
+        plt.setp(stemlines, color=colors["histogram"])
 
         # Add line for nonparametric fit using lowess
-        ax1.plot(x_nonparametric, y_nonparametric, label="Nonparametric")
+        ax1.plot(x_nonparametric, y_nonparametric, label="Nonparametric", color=colors["Nonparametric"])
 
         # Add line for perfect calibration
-        ax1.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
+        ax1.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated", color=colors["Perfectly calibrated"])
 
         ax1.set_xlabel('Predicted Probability')
         ax1.set_ylabel('Actual Probability')

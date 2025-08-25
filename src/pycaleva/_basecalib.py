@@ -744,7 +744,7 @@ class _BaseCalibrationEvaluator:
 
 
     # STATISTICAL TEST / PLOT : Calibration Belt
-    def calbelt(self, plot:bool=False, subset = None, confLevels=[0.8, 0.95], alpha=0.95) -> calbelt_result:
+    def calbelt(self, plot:bool=False, subset = None, confLevels=[0.8, 0.95], alpha=0.95, color="cornflowerblue") -> calbelt_result:
         """Calculate the calibration belt and draw plot if desired.
         
         Parameters
@@ -812,7 +812,7 @@ class _BaseCalibrationEvaluator:
         cb = CalibrationBelt(self.__y, self.__p, self.__devel, subset=subset, confLevels=confLevels, alpha=alpha)
         
         if plot:
-            return cb.plot()
+            return cb.plot(color=color)
         else:
             return cb.stats()
 

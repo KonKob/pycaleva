@@ -479,7 +479,7 @@ class CalibrationBelt():
 
 
 
-    def plot(self, alpha=.95, **kwargs):
+    def plot(self, alpha=.95, color="cornflowerblue", **kwargs):
         """Draw the calibration belt plot.
         
         Parameters
@@ -548,7 +548,7 @@ class CalibrationBelt():
         ax.text(0.00, 0.85, self.__get_plot_text(), fontsize=10, family='monospace', bbox=props)
 
         # Set primary color belt
-        facecol = 'cornflowerblue' 
+        facecol = color
 
         # Set alpha of colour for each confidence level
         col_alphas = np.linspace(start=0.9, stop=0.4, num=len(self.__confLevels) )

@@ -300,10 +300,10 @@ class _BaseCalibrationEvaluator:
         self.__nonparametric_fit()                          # Calculate nonparametric fit and update Area Within Lowess Curve
 
 
-    def __nonparametric_fit(self, update_awlc=True):
+    def __nonparametric_fit(self, update_awlc=True, frac=2.0/3.0):
         # Nonparametric curve based on y and p using lowess
         x_nonparametric = np.arange(0,1,0.005)
-        y_nonparametric = lowess(self.__y, self.__p, it=0, xvals=x_nonparametric)
+        y_nonparametric = lowess(self.__y, self.__p, it=0, xvals=x_nonparametric, frac=frac)
 
         if update_awlc:
             diff = np.abs(x_nonparametric - y_nonparametric)
@@ -817,7 +817,7 @@ class _BaseCalibrationEvaluator:
             return cb.stats()
 
 
-    def calibration_plot(self, colors={"Perfectly calibrated": "black", "Nonparametric": "blue", "histogram": "lightgrey", "Grouped observations": "red"}):
+    def calibration_plot(self, colors={"Perfectly calibrated": "black", "Nonparametric": "blue", "histogram": "lightgrey", "Grouped observations": "red"}, frac=0.2):
         """Generate the calibration plot for the given predicted probabilities and true class labels of current class instance.
 
         Returns
@@ -857,7 +857,7 @@ class _BaseCalibrationEvaluator:
         p_grouped = self.__ct["mean_predicted"]
 
         # Get nonparametric curve based on y and p using lowess
-        x_nonparametric,y_nonparametric = self.__nonparametric_fit(update_awlc=False)
+        x_nonparametric,y_nonparametric = self.__nonparametric_fit(update_awlc=False, frac=frac)
 
         # Add calibration line for model
         plt.scatter(p_grouped,y_grouped, marker="^", facecolors='none', edgecolors=colors["Grouped observations"], label=f'Grouped observations g={self.__ngroups}')
